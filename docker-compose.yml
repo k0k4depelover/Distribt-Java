@@ -1,0 +1,82 @@
+networks:
+  public-net:
+    driver: bridge
+  
+  internal-net:
+    driver: bridge
+    internal: true
+
+
+services:
+  eureka-server:
+    networks:
+      - internal-net
+    build: ./eureka-server
+    ports:
+      - 8761:8761
+
+  
+  api-gateway:
+    networks:
+      - public-net
+      - internal-net
+    build: ./api-gateway
+    ports:
+      - 8090:8090
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+
+
+  api-gateway-teenants:
+    networks:
+      - public-net
+      - internal-net
+    build: ./api-gateway-teenants
+    ports:
+    - 9090:9090
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+
+
+  msvc-suscriptions:
+    networks:
+      - internal-net
+    build: ./msvc-suscribtions
+    ports:
+      - 9001:9001
+    depends_on:
+      - eureka-server
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db-suscriptions
+    environment:
+      - POSTGRES_DB=suscribtions-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=s3cur3p4SSw0rd
+    ports:
+      - 5432:5432
+    networks:
+      - internal-net
+
+  portainer:
+    networks: 
+      - public-net
+    image: portainer/portainer-ce:latest
+    ports: 
+      - "9000:9000"
+
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - portainer_data:/data
+
+    restart: always
+
+volumes:
+    portainer_data:
