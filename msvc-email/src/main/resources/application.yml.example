@@ -1,0 +1,22 @@
+server:
+  port: 9002
+
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tucorreo@gmail.com
+    password: tu-app-password
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  application:
+    name: msvc-email
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

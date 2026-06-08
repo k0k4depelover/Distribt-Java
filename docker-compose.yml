@@ -53,6 +53,23 @@ services:
     environment:
       - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
 
+  msvc-email:
+    networks:
+      - internal-net
+    build: ./msvc-email
+
+    ports:
+      - 9002:9002
+    
+    depends_on:
+      - eureka-server
+    
+    environment:
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+
+    
+
+
   postgres:
     image: postgres:16-alpine
     container_name: postgres-db-suscriptions
