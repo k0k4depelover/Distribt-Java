@@ -1,4 +1,4 @@
-package com.distribuited.systems.msvc_email.Config;
+package main.java.com.distribuited.systems.msvc_email.Config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

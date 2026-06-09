@@ -6,7 +6,10 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: kylebutler1033@gmail.com
-    password: 
+    password: "aqvq tldh caef qwsr"
+    mail.smtp.auth: true 
+    mail.smtp.starttls.enable: true
+    
 
   application:
     name: msvc-email
