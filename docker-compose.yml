@@ -11,6 +11,7 @@ services:
   eureka-server:
     networks:
       - internal-net
+      - public-net
     build: ./eureka-server
     ports:
       - 8761:8761
@@ -34,8 +35,8 @@ services:
       - public-net
       - internal-net
     build: ./api-gateway-teenants
-    ports:
-    - 9090:9090
+    #ports:
+    #- 9090:9090
     depends_on:
       - eureka-server
     environment:
@@ -45,9 +46,9 @@ services:
   msvc-suscriptions:
     networks:
       - internal-net
-    build: ./msvc-suscribtions
-    ports:
-      - 9001:9001
+    build: ./msvc-suscriptions
+    #ports:
+    #  - 9001:9001
     depends_on:
       - eureka-server
     environment:
@@ -58,8 +59,8 @@ services:
       - internal-net
     build: ./msvc-email
 
-    ports:
-      - 9002:9002
+    #ports:
+    #  - 9002:9002
     
     depends_on:
       - eureka-server
@@ -74,20 +75,46 @@ services:
     image: postgres:16-alpine
     container_name: postgres-db-suscriptions
     environment:
-      - POSTGRES_DB=suscribtions-db
+      - POSTGRES_DB=suscriptions-db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=s3cur3p4SSw0rd
-    ports:
-      - 5432:5432
+    #ports:
+    #  - 5432:5432
     networks:
       - internal-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    networks:
+      - internal-net
+      
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:alpine
+    container_name: redis-rate-limiter
+
+    networks:
+      - internal-net
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis-data:/data
 
   portainer:
     networks: 
       - public-net
     image: portainer/portainer-ce:latest
-    ports: 
-      - "9000:9000"
+    #ports: 
+    #  - "9000:9000"
 
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
@@ -97,3 +124,4 @@ services:
 
 volumes:
     portainer_data:
+    redis-data:

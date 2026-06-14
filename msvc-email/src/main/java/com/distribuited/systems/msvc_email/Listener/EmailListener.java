@@ -1,19 +1,28 @@
-package main.java.com.distribuited.systems.msvc_email.Listener;
+package com.distribuited.systems.msvc_email.Listener;
 
-import com.distribuited.systems.msvc_email.dto.SuscriptionDto;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+
+import com.distribuited.systems.msvc_email.Dto.SuscriptionDto;
+import com.distribuited.systems.msvc_email.Dto.UnsuscriptionDto;
+import com.distribuited.systems.msvc_email.Services.EmailService;
+import org.springframework.stereotype.Component;
+
 
 @Component
 public class EmailListener {
-    
     public final EmailService emailService;
+
+    public EmailListener(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @RabbitListener(queues = "suscription-queue")
     public void onSuscribe(SuscriptionDto dto){
-        emailService.sendWelcomeEmail(dto);
+        emailService.sendWelcomeEmail(dto.email());
     }
-
-    public void onUnsuscribe(queues= "unsuscription-queue")
+    
+    @RabbitListener(queues="unsuscription-queue")
     public void onUnsuscribe(UnsuscriptionDto dto){
-        emailService.sendGoodByeEmail(dto);
+        emailService.sendGoodbyeEmail(dto.email());
     }
 }

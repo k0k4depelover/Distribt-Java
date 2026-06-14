@@ -4,22 +4,32 @@ server:
 spring:
   application:
     name: api-gateway
+
+  data:
+    redis:
+      host: redis-rate-limiter
+      port: 6379
+
   cloud:
     gateway:
       routes:
-        - id: suscriptions
-          uri: lb://msvc-suscribtions
+        - id: msvc-suscriptions
+          uri: lb://msvc-suscriptions
           predicates:
             - Path=/api/suscriptions/**
-
           filters:
-            - StripPrefix=1
+          - name: RequestRateLimiter
+            args:
+              redis-rate-limiter: 
+                replenishRate: 3 # Cantidad de peticiones por minuto aceptadas
+                burstCapacity: 10 # Cantidad de peticiones acumuladas
+              key-resolver: "#{@userKeyResolver}" # El bean de configuracion
 
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
 
 
 
