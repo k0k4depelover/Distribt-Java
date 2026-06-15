@@ -22,6 +22,12 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 2000ms 
 
 eureka:
   client:
