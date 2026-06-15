@@ -1,22 +1,38 @@
 server:
   port: 9002
 
-
 spring:
+  application:
+    name: msvc-email
+
   mail:
     host: smtp.gmail.com
     port: 587
     username: tucorreo@gmail.com
-    password: tu-app-password
+    password: "tu password secure"
     properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
-  application:
-    name: msvc-email
-
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 2000ms 
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
+
+
+      
