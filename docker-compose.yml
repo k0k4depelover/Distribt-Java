@@ -72,20 +72,29 @@ services:
       - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
 
     
-
-
-  postgres:
+  postgres-teenants:
     image: postgres:16-alpine
-    container_name: postgres-db-suscriptions
+    container_name: postgres-db-teenants
+    environment:
+      - POSTGRES_DB=teenants-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=PASSWORD
+    networks:
+      - internal-net
+
+
+  postgres-suscriptions:
+    image: postgres:16-alpine
+    container_name: postgres-db-subs
     environment:
       - POSTGRES_DB=suscriptions-db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=s3cur3p4SSw0rd
-    #ports:
-    #  - 5432:5432
+
     networks:
       - internal-net
-
+    ports:
+      - 5432:5432
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
@@ -99,9 +108,9 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  redis:
+  redis-rl:
     image: redis:alpine
-    container_name: redis-rate-limiter
+    container_name: redis-rl
 
     networks:
       - internal-net
