@@ -8,7 +8,7 @@ networks:
 
 
 services:
-  eureka-server:
+  eureka-server-ds:
     networks:
       - internal-net
       - public-net
@@ -25,9 +25,9 @@ services:
     ports:
       - 8090:8090
     depends_on:
-      - eureka-server
+      - eureka-server-ds
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.service-url.defaultZone=http://eureka-server-ds:8761/eureka
 
 
   api-gateway-teenants:
@@ -38,9 +38,9 @@ services:
     #ports:
     #- 9090:9090
     depends_on:
-      - eureka-server
+      - eureka-server-ds
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.service-url.defaultZone=http://eureka-server-ds:8761/eureka
 
 
   msvc-suscriptions:
@@ -50,9 +50,9 @@ services:
     #ports:
     #  - 9001:9001
     depends_on:
-      - eureka-server
+      - eureka-server-ds
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.service-url.defaultZone=http://eureka-server-ds:8761/eureka
 
   msvc-email:
     networks:
@@ -66,11 +66,10 @@ services:
     #  - 9002:9002
     
     depends_on:
-      - eureka-server
+      - eureka-server-ds
     
     environment:
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
-
+      - eureka.client.service-url.defaultZone=http://eureka-server-ds:8761/eureka
     
   postgres-teenants:
     image: postgres:16-alpine
