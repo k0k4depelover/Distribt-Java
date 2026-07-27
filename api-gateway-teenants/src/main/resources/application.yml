@@ -5,7 +5,7 @@ spring:
   application:
     name: api-gateway-teenants
   datasource:
-    url: jdbc:postgresql://postgres-teenants:5432/s
+    url: jdbc:postgresql://postgres-teenants:5432/teenants-db
     username: admin
     password: PASSWORD
 
@@ -14,11 +14,12 @@ spring:
       host: redis-rl
       port: 6379
   jpa:
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    
 
 
 eureka:
